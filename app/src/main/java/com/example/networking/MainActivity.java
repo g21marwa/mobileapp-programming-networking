@@ -26,17 +26,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Mountain> list;
-    private ArrayAdapter<String> listAdapter;
-    private ListView simpleListView;
-    private String jsonString;
+    public ArrayList<Mountain> list;
+    public ArrayList<String> list2;
+    public ArrayAdapter<String> listAdapter;
+    public ListView simpleListView;
+    public String jsonString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
-        listAdapter = new ArrayAdapter<String>(this, R.layout.activity_main, R.id.itemTextView, list);
+        list2 = new ArrayList<String>();
+        list = new ArrayList<Mountain>();
+        listAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.activity_main, R.id.myList, list2);
 
+        new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
+
+        simpleListView = (ListView) findViewById(R.id.myList);
+
+        listAdapter = new ArrayAdapter<String>(this,
+                R.layout.item_view, R.id.itemTextView, list2);
+        simpleListView.setAdapter(listAdapter);
     }
     @SuppressLint("StaticFieldLeak")
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject json1 = new JSONArray(json).getJSONObject(i);
                     String id = json1.getString("ID");
+                    list2.add(id);
                     String name = json1.getString("name");
                     String type = json1.getString("type");
                     String company = json1.getString("company");
@@ -105,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 Log.e("brom", "E:" + e.getMessage());
             }
-            jsonString = json;
+            listAdapter.notifyDataSetChanged();
 
             simpleListView = findViewById(R.id.myList);
 
