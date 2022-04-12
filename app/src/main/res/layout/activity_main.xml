@@ -10,9 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/myList">
 
 
     </ListView>
-
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/itemTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </androidx.constraintlayout.widget.ConstraintLayout>
