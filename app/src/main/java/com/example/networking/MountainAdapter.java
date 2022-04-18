@@ -21,7 +21,6 @@ public class MountainAdapter extends RecyclerView.Adapter<MountainAdapter.ViewHo
     private static List<Mountain> localDataSet;
     private static Context activity;
     public MountainAdapter(List<Mountain> dataset, Context context){
-        System.out.println("asd");
         localDataSet = dataset;
         activity = context;
     }

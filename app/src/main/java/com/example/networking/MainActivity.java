@@ -37,23 +37,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = new ArrayList<Mountain>();
-        /*listAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.activity_main, R.id.mountainName2, list2);
-
-        new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
-
-        simpleListView = (ListView) findViewById(R.id.myList);
-
-        simpleListView.setAdapter(listAdapter);*/
-        HashMap<String, String> auxdata = new HashMap<String, String>();
-        auxdata.put("wiki", "wiki");
-        auxdata.put("img", "img");
-
         rv = findViewById(R.id.myRecycler);
         rv.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MountainAdapter(list, MainActivity.this);
         rv.setAdapter(mAdapter);
         //Testing while wwwlab is down.
         /*for(int i = 0; i < 5; i++){
+            HashMap<String, String> auxdata = new HashMap<String, String>();
+            auxdata.put("wiki", "wiki");
+            auxdata.put("img", "img");
             Mountain m = new Mountain("id" + i, "name" + i, "type", "company", "location", "category", 100, 100, auxdata);
             list.add(m);
             mAdapter.notifyDataSetChanged();
