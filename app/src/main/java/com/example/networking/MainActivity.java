@@ -1,6 +1,8 @@
 package com.example.networking;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -28,16 +30,12 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     public ArrayList<Mountain> list;
-    public ArrayList<String> list2;
-    public ArrayAdapter<String> listAdapter;
     public MountainAdapter mAdapter;
-    public ListView simpleListView;
-    public String jsonString;
+    public RecyclerView rv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        list2 = new ArrayList<String>();
         list = new ArrayList<Mountain>();
         /*listAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.activity_main, R.id.mountainName2, list2);
 
@@ -46,21 +44,22 @@ public class MainActivity extends AppCompatActivity {
         simpleListView = (ListView) findViewById(R.id.myList);
 
         simpleListView.setAdapter(listAdapter);*/
+        HashMap<String, String> auxdata = new HashMap<String, String>();
+        auxdata.put("wiki", "wiki");
+        auxdata.put("img", "img");
 
-        mAdapter = new MountainAdapter(MainActivity.this, list);
+        rv = findViewById(R.id.myRecycler);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new MountainAdapter(list, MainActivity.this);
+        rv.setAdapter(mAdapter);
+        //Testing while wwwlab is down.
+        /*for(int i = 0; i < 5; i++){
+            Mountain m = new Mountain("id" + i, "name" + i, "type", "company", "location", "category", 100, 100, auxdata);
+            list.add(m);
+            mAdapter.notifyDataSetChanged();
+        }*/
         new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
-        simpleListView = (ListView) findViewById(R.id.myList);
 
-        simpleListView.setAdapter(mAdapter);
-        simpleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("asd", adapterView.getItemAtPosition(i).toString());
-                Intent myIntent = new Intent(MainActivity.this, MountainInfo.class);
-                myIntent.putExtra("mountain", (Mountain)adapterView.getItemAtPosition(i));
-                startActivity(myIntent);
-            }
-        });
     }
     @SuppressLint("StaticFieldLeak")
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String json) {
-            Log.d("TAG", json);
+            Log.d("TAG", "json");
 
             try {
                 // Ditt JSON-objekt som Java
@@ -126,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                     auxdata.put("img", jsonArrAux.getString("img"));
                     Mountain m = new Mountain(id, name, type, company, location, category, size, cost, auxdata);
                     list.add(m);
-                    list2.add(m.getName());
                 }
 
             } catch (JSONException e) {
@@ -134,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
             }
             mAdapter.notifyDataSetChanged();
 
-            simpleListView = findViewById(R.id.myList);
 
         }
     }
