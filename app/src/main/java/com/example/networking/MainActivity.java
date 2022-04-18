@@ -3,9 +3,12 @@ package com.example.networking;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -20,15 +23,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public ArrayList<Mountain> list;
     public ArrayList<String> list2;
     public ArrayAdapter<String> listAdapter;
+    public MountainAdapter mAdapter;
     public ListView simpleListView;
     public String jsonString;
     @Override
@@ -37,15 +39,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         list2 = new ArrayList<String>();
         list = new ArrayList<Mountain>();
-        listAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.activity_main, R.id.myList, list2);
+        /*listAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.activity_main, R.id.mountainName2, list2);
 
         new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
 
         simpleListView = (ListView) findViewById(R.id.myList);
 
-        listAdapter = new ArrayAdapter<String>(this,
-                R.layout.item_view, R.id.itemTextView, list2);
-        simpleListView.setAdapter(listAdapter);
+        simpleListView.setAdapter(listAdapter);*/
+
+        mAdapter = new MountainAdapter(MainActivity.this, list);
+        new JsonTask().execute("https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
+        simpleListView = (ListView) findViewById(R.id.myList);
+
+        simpleListView.setAdapter(mAdapter);
+        simpleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("asd", adapterView.getItemAtPosition(i).toString());
+                Intent myIntent = new Intent(MainActivity.this, MountainInfo.class);
+                myIntent.putExtra("mountain", (Mountain)adapterView.getItemAtPosition(i));
+                startActivity(myIntent);
+            }
+        });
     }
     @SuppressLint("StaticFieldLeak")
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -97,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject json1 = new JSONArray(json).getJSONObject(i);
                     String id = json1.getString("ID");
-                    list2.add(id);
+
                     String name = json1.getString("name");
                     String type = json1.getString("type");
                     String company = json1.getString("company");
@@ -105,17 +120,19 @@ public class MainActivity extends AppCompatActivity {
                     String category = json1.getString("category");
                     int size = json1.getInt("size");
                     int cost = json1.getInt("cost");
-                    Map<String, String> auxdata = new HashMap<String, String>();
+                    HashMap<String, String> auxdata = new HashMap<String, String>();
                     JSONObject jsonArrAux = json1.getJSONObject("auxdata");
                     auxdata.put("wiki", jsonArrAux.getString("wiki"));
                     auxdata.put("img", jsonArrAux.getString("img"));
-                    list.add(new Mountain(id, name, type, company, location, category, size, cost, auxdata));
+                    Mountain m = new Mountain(id, name, type, company, location, category, size, cost, auxdata);
+                    list.add(m);
+                    list2.add(m.getName());
                 }
 
             } catch (JSONException e) {
                 Log.e("brom", "E:" + e.getMessage());
             }
-            listAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
 
             simpleListView = findViewById(R.id.myList);
 

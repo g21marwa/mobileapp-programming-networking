@@ -1,8 +1,10 @@
 package com.example.networking;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
-public class Mountain {
+public class Mountain implements Serializable {
     public String id;
     public String name;
     public String type;
@@ -11,9 +13,24 @@ public class Mountain {
     public String category;
     public int size;
     public int cost;
-    public Map<String, String> auxdata;
+    public HashMap<String, String> auxdata;
 
-    public Mountain(String id, String name, String type, String company, String location, String category, int size, int cost, Map<String, String> auxdata) {
+    @Override
+    public String toString() {
+        return "Mountain{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", company='" + company + '\'' +
+                ", location='" + location + '\'' +
+                ", category='" + category + '\'' +
+                ", size=" + size +
+                ", cost=" + cost +
+                ", auxdata=" + auxdata +
+                '}';
+    }
+
+    public Mountain(String id, String name, String type, String company, String location, String category, int size, int cost, HashMap<String, String> auxdata) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -89,11 +106,11 @@ public class Mountain {
         this.cost = cost;
     }
 
-    public Map<String, String> getAuxdata() {
+    public HashMap<String, String> getAuxdata() {
         return auxdata;
     }
 
-    public void setAuxdata(Map<String, String> auxdata) {
+    public void setAuxdata(HashMap<String, String> auxdata) {
         this.auxdata = auxdata;
     }
 }
