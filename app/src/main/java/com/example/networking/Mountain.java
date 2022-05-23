@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Mountain implements Serializable {
-    public String id;
+    public String ID;
     public String name;
     public String type;
     public String company;
@@ -18,7 +18,7 @@ public class Mountain implements Serializable {
     @Override
     public String toString() {
         return "Mountain{" +
-                "id='" + id + '\'' +
+                "id='" + ID + '\'' +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", company='" + company + '\'' +
@@ -30,8 +30,8 @@ public class Mountain implements Serializable {
                 '}';
     }
 
-    public Mountain(String id, String name, String type, String company, String location, String category, int size, int cost, HashMap<String, String> auxdata) {
-        this.id = id;
+    public Mountain(String ID, String name, String type, String company, String location, String category, int size, int cost, HashMap<String, String> auxdata) {
+        this.ID = ID;
         this.name = name;
         this.type = type;
         this.company = company;
@@ -43,11 +43,11 @@ public class Mountain implements Serializable {
     }
 
     public String getId() {
-        return id;
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String ID) {
+        this.ID = ID;
     }
 
     public String getName() {

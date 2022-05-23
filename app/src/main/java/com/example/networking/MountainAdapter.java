@@ -20,10 +20,15 @@ public class MountainAdapter extends RecyclerView.Adapter<MountainAdapter.ViewHo
 
     private static List<Mountain> localDataSet;
     private static Context activity;
-    public MountainAdapter(List<Mountain> dataset, Context context){
-        localDataSet = dataset;
+    public MountainAdapter(Context context){
+        localDataSet = new ArrayList<>();
         activity = context;
     }
+
+    public void setLocalDataSet(List<Mountain> dataset){
+        localDataSet = dataset;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -50,6 +55,7 @@ public class MountainAdapter extends RecyclerView.Adapter<MountainAdapter.ViewHo
     }
 
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView myTextView;
         private Mountain clicked;
@@ -70,4 +76,6 @@ public class MountainAdapter extends RecyclerView.Adapter<MountainAdapter.ViewHo
             return myTextView;
         }
     }
+
+
 }
